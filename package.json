@@ -8,7 +8,9 @@
     },
     "author": "",
     "license": "ISC",
-    "devDependencies": {},
+    "devDependencies": {
+        "jshint": "^2.9.5"
+    },
     "bin": {
         "gcmd": "bin/index.js"
     },
