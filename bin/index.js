@@ -98,27 +98,25 @@ function navigateDir(dir) {
 
 (function() {
 
+  const keys = {};
+  keys["CA=="] = function() { buffer = buffer.substring(0, buffer.length - 1); };
+  keys["G1syfg=="] = function() { buffer += bufferHasSpace() ? selectedFile.filepath : ' ' + selectedFile.filepath; };
+  keys['G1sxfg=='] = function() { buffer += bufferHasSpace() ? process.cwd() : ' ' + process.cwd(); };
+
+  function bufferHasSpace() {
+    return buffer.endsWith(' ');
+  }
 
   process.stdin.on('data', function(key) {
-
-    function bufferHasSpace() {
-      return buffer.endsWith(' ');
-    }
-
     process.stdout.clearLine();
     process.stdout.cursorTo(0);
-
-    if (key.toString('base64') === 'CA==') {
-      buffer = buffer.substring(0, buffer.length - 1);
-    } else if (key.toString('base64') === 'G1syfg==') {
-      buffer += bufferHasSpace() ? selectedFile.filepath : ' ' + selectedFile.filepath;
-    } else if (key.toString('base64') === 'G1syfg==') {
-      buffer += bufferHasSpace() ? process.cwd() : ' ' + process.cwd();
+    const base64key = key.toString('base64');
+    if (base64key in keys) {
+      keys[base64key].call(null);
     } else {
       buffer += key;
     }
     process.stdout.write(buffer);
   });
   navigateDir(process.cwd());
-
 })();
